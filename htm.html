@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+
+<body class="bg-secondary">
+    <header class="bg-dark text-white p-3">
+        <div class="container">
+            <div class="row text-center text-md-start">
+                <div class="col-md-3 col-6 mb-2 mb-md-0"><p class="m-0">Home</p></div>
+                <div class="col-md-3 col-6 mb-2 mb-md-0"><p class="m-0">Products</p></div>
+                <div class="col-md-3 col-6"><p class="m-0">Contact</p></div>
+                <div class="col-md-3 col-6"><p class="m-0">About</p></div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container mt-3">
+        <p class="fs-4">Welcome to <strong id="str" class="text-primary">taxes</strong> website</p>
+    </div>
+    
+    <hr>
+    <h2 class="text-center">IMPRESSION DU LUXE</h2>
+    <hr>
+    
+    <main class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <section class="bg-light p-4 rounded shadow">
+                    <form action="">
+                        <div class="mb-4">
+                            <h3 class="fs-4">Nombre de pages :</h3>
+                            <input type="number" name="" class="form-control" id="inpN">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h3 class="fs-4">Gamme d'âge :</h3>
+                            <div class="form-check ms-2">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="radio1" value="0-10">
+                                <label class="form-check-label" for="radio1">
+                                    Entre 0 Et 10
+                                </label>
+                            </div>
+                            <div class="form-check ms-2">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="radio2" value=">10">
+                                <label class="form-check-label" for="radio2">
+                                    Superieur De 10
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="mb-4">
+                            <h3 class="fs-4">Type d'Impression :</h3>
+                            <select name="" id="printType" class="form-select bg-dark text-light border border-dark">
+                                <option value="Colr">Couleur</option>
+                                <option value="noColr">No couleur</option>
+                            </select>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="mb-4">
+                            <h3 class="fs-4">Options :</h3>
+                            <div class="form-check ms-2 mb-2">
+                                <input type="checkbox" class="form-check-input" name="check" id="checkSpiral" value="spiral">
+                                <label for="checkSpiral" class="form-check-label">Spiral (8DH)</label>
+                            </div>
+                            <div class="form-check ms-2 mb-2">
+                                <input type="checkbox" class="form-check-input" name="check" id="checkPlasti" value="plasti">
+                                <label for="checkPlasti" class="form-check-label">Plastification (10DH)</label>
+                            </div>
+                            <div class="form-check ms-2">
+                                <input type="checkbox" class="form-check-input" name="check" id="checkNone" value="">
+                                <label for="checkNone" class="form-check-label">Rien</label>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="text-center">
+                            <button onclick="imp()" class="btn btn-dark w-100 py-2" type="button">Calculer Totale</button>
+                        </div>
+                    </form>
+                </section>
+                
+                <div id="dv" class="mt-4 p-3 bg-info text-dark fs-4 rounded text-center"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function imp() {
+            event.preventDefault();
+            
+            let type = document.querySelector("#printType").value;
+            let selectedRadio = document.querySelector('input[name="exampleRadios"]:checked');
+            let nbP = selectedRadio ? selectedRadio.value : "";
+            let tax = 0;
+            let nb = parseInt(document.querySelector("#inpN").value) || 0;
+            let dv = document.querySelector("#dv");
+            
+            // Calculate base price based on page count and range
+            if (nbP == "0-10") {
+                tax += nb * 1;
+            } else if (nbP == ">10") {
+                tax += nb * 1.5;
+            }
+            
+            // Add cost for color printing
+            if (type == 'Colr') {
+                tax += nb * 0.5;
+            }
+            
+            // Check for spiral option
+            if (document.querySelector('#checkSpiral:checked')) {
+                tax += 8;
+            }
+            
+            // Check for plastification option
+            if (document.querySelector('#checkPlasti:checked')) {
+                tax += 10;
+            }
+            
+            dv.innerHTML = `Le Totale est ${tax} DH`;
+        }
+        
+        // Handle the "Rien" checkbox
+        document.querySelector('#checkNone').addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelector('#checkSpiral').checked = false;
+                document.querySelector('#checkPlasti').checked = false;
+            }
+        });
+        
+        // Uncheck "Rien" if other options are selected
+        document.querySelector('#checkSpiral').addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelector('#checkNone').checked = false;
+            }
+        });
+        
+        document.querySelector('#checkPlasti').addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelector('#checkNone').checked = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
